@@ -5,6 +5,8 @@ class Config:
     def __init__(self):
         pass
 
+    DEBUG = False
+
     # resize
     image_width = 2448.0 / 2
     interpolation = cv2.INTER_CUBIC
@@ -25,3 +27,8 @@ class Config:
 
     # lines
     eps = 12
+
+    # digit size
+    digit_width = 64
+    digit_height = 64
+    digit_size = (digit_height, digit_width)

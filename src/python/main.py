@@ -1,11 +1,14 @@
+from nonogram import Nonogram
 from nonogram_detector.binarize_functions import *
-
 from nonogram_detector.nonogram_detector import NonogramDetector
 from nonogram_detector.rectangle_functions import *
-from nonogram import Nonogram
 from perspective_transformer.perspective_transformer import *
 from lines_detector.lines_detector import LinesDetector
 from lines_detector.line_detection_functions import *
+from digit_classifier.mask_classifier import *
+
+
+mask_classifier = MaskClassifier("..\\..\\res\\digits_00")
 
 path = "..\\..\\res\\imgs_00\\img_%2d.jpg"
 cap = cv2.VideoCapture(path)
