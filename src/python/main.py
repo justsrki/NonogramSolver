@@ -1,9 +1,11 @@
-from detector.binarize import *
+from nonogram_detector.binarize_functions import *
 
-from detector.detector import Detector
-from detector.rectangle import *
+from nonogram_detector.nonogram_detector import NonogramDetector
+from nonogram_detector.rectangle_functions import *
 from nonogram import Nonogram
 from perspective_transformer.perspective_transformer import *
+from lines_detector.lines_detector import LinesDetector
+from lines_detector.line_detection_functions import *
 
 path = "..\\..\\res\\imgs_00\\img_%2d.jpg"
 cap = cv2.VideoCapture(path)
@@ -14,13 +16,17 @@ while True:
         break
 
     solver = Nonogram(frame)
-    solver.set_detector(Detector(binarize_threshold, rectangle_approx_poly))
 
-    transformer = PerspectiveTransformer()
+    nonogram_detector = NonogramDetector(binarize_adaptive_threshold, rectangle_approx_poly)
+    solver.set_detector(nonogram_detector)
+
+    transformer = PerspectiveTransformer(binarize_fixed_threshold(96))
     solver.set_perspective_transformer(transformer)
 
-    img = solver.solve()
-    cv2.imshow('test', img)
-    # img, contours = solver.solve()
-    # cv2.imshow('test', cv2.drawContours(cv2.cvtColor(solver.detector.image, cv2.COLOR_GRAY2RGB), contours, -1, (255, 0, 0), thickness=3))
-    cv2.waitKey(0)
+    line_detector = LinesDetector(lines_nxm_kernel)
+    solver.set_line_detector(line_detector)
+
+    imgs = solver.solve()
+    for img in imgs:
+        cv2.imshow('test', img)
+        cv2.waitKey(0)

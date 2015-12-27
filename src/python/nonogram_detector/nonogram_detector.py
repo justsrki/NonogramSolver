@@ -4,7 +4,7 @@ from config import Config
 from util.benchmark import timeit
 
 
-class Detector:
+class NonogramDetector:
     def __init__(self, binarize_fn, rectangle_fn):
         self.binarize_fn = binarize_fn
         self.rectangle_fn = rectangle_fn

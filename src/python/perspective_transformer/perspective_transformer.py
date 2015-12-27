@@ -5,7 +5,8 @@ from util.benchmark import timeit
 
 
 class PerspectiveTransformer:
-    def __init__(self):
+    def __init__(self, binarize_fn):
+        self.binarize_fn = binarize_fn
         self.image = None
         self.contour = None
 
@@ -52,4 +53,5 @@ class PerspectiveTransformer:
             [max_width - 1, max_height - 1],
             [0, max_height - 1]], dtype="float32")
 
-        return cv2.warpPerspective(self.image, cv2.getPerspectiveTransform(rect, dst_coordinates), (max_width, max_height))
+        wrapped_img = cv2.warpPerspective(self.image, cv2.getPerspectiveTransform(rect, dst_coordinates), (max_width, max_height))
+        return self.binarize_fn(wrapped_img)
