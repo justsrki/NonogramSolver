@@ -16,7 +16,7 @@ class NonogramDetector:
     @timeit
     def resize_image(self):
         factor = Config.image_width / self.image.shape[1]
-        self.image = cv2.resize(self.image, (0, 0), fx=factor, fy=factor, interpolation=Config.interpolation)
+        #self.image = cv2.resize(self.image, (0, 0), fx=factor, fy=factor, interpolation=Config.interpolation)
 
     @timeit
     def change_color_channel(self):

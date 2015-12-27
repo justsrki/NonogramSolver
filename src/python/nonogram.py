@@ -1,5 +1,4 @@
 import cv2
-
 from util.benchmark import timeit
 
 
@@ -34,8 +33,7 @@ class Nonogram:
             self.line_detector.set_image(img)
             imgs, coords = self.line_detector.get_result()
 
-            #img = cv2.add(img, cv2.add(imgs[0], imgs[1]))
-
+            # img = cv2.add(img, cv2.add(imgs[0], imgs[1]))
             sol.append(img)
 
         return sol
