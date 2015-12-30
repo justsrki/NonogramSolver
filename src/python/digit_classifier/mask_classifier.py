@@ -13,9 +13,11 @@ class MaskClassifier:
 
         if digits_path is not None:
             self.path = digits_path
+            self.masks_path = self.path + '\\masks\\'
             self.create_masks()
         elif masks_path is not None:
-            # TODO
+            self.masks_path = masks_path
+            self.load_masks()
             pass
 
     @staticmethod
@@ -31,10 +33,10 @@ class MaskClassifier:
 
     @staticmethod
     def __create_mask(paths):
-        mask = np.zeros((Config.digit_height, Config.digit_width), 'float32')
+        mask = np.zeros(Config.digit_size, 'float32')
         for path in paths:
             img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
-            img = cv2.resize(img, (Config.digit_height, Config.digit_width))
+            img = cv2.resize(img, Config.digit_size)
             mask += img
 
         mask /= mask.max()
@@ -43,25 +45,33 @@ class MaskClassifier:
     def create_masks(self):
         for i in xrange(0, 10):
             paths = MaskClassifier.__get_files(self.path + '\\' + str(i))
-            mask = MaskClassifier.__create_mask(paths)
-            cv2.imwrite(self.path + '\\masks\\' + str(i) + '.png', mask * 255)
-            self.masks[i] = (mask * 255).astype('int16')
-        if Config.DEBUG:
-            for i in xrange(0, 10):
-                print '---------- ', i, ' ---------'
-                paths = MaskClassifier.__get_files(self.path + '\\' + str(i))
-                self.test(paths, i)
+            mask = MaskClassifier.__create_mask(paths) * 255
+            cv2.imwrite(self.masks_path + '\\' + str(i) + '.png', mask)
+            self.masks[i] = mask.astype('int')
 
-    def test(self, paths, expected):
-        for path in paths:
-            img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
-            digit = min(self.classify(img))
-            print "{} - {:.2f}".format(digit[1], digit[0])
-            if expected != digit[1]:
-                print sorted(self.classify(img))
+    def load_masks(self):
+        for i in xrange(0, 10):
+            mask = np.zeros(Config.digit_size, 'int')
+            mask += cv2.resize(cv2.imread(self.masks_path + '\\' + str(i) + '.png', cv2.IMREAD_GRAYSCALE), Config.digit_size)
+            self.masks[i] = mask
 
     def classify(self, img):
-        img = cv2.resize(img, (Config.digit_height, Config.digit_width))
-        # return [(1.0 * (self.masks[i] * img).sum() / (self.masks[i].sum()), i) for i, mask in enumerate(self.masks)]
+        img = cv2.resize(img, Config.digit_size)
         return [(1.0 * np.abs(self.masks[i] - img).sum() / self.masks[i].sum(), i) for i, mask in enumerate(self.masks)]
 
+    def test(self, root_path, full_log=False):
+        for i in xrange(0, 10):
+            print '---------- ', i, ' ----------'
+            count, error = 0, 0
+
+            for path in MaskClassifier.__get_files(root_path + '\\' + str(i)):
+                count += 1
+                digits = sorted(self.classify(cv2.imread(path, cv2.IMREAD_GRAYSCALE)))
+
+                if full_log:
+                    print "{} - {:.4f}  -  {} - {:.4f}".format(digits[0][1], digits[0][0], digits[1][1], digits[1][0])
+
+                if i != digits[0][1]:
+                    error += 1
+                    print digits
+            print "Successful: {:.2f}% - Count: {}, Error: {}".format(100.0 * (count - error) / count, count, error)

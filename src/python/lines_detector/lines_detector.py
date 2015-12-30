@@ -1,4 +1,3 @@
-import cv2
 import numpy as np
 from util.benchmark import timeit
 from config import Config
@@ -15,7 +14,7 @@ class LinesDetector:
     @staticmethod
     def get_lines_coordinates(sum_line, length):
         result = []
-        threshold = 255 * length / 2
+        threshold = 255 * length / 3
 
         lines = []
         for x, val in enumerate(sum_line):

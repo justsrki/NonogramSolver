@@ -16,7 +16,7 @@ class NonogramDetector:
     @timeit
     def resize_image(self):
         factor = Config.image_width / self.image.shape[1]
-        #self.image = cv2.resize(self.image, (0, 0), fx=factor, fy=factor, interpolation=Config.interpolation)
+        self.image = cv2.resize(self.image, (0, 0), fx=factor, fy=factor, interpolation=Config.interpolation)
 
     @timeit
     def change_color_channel(self):
@@ -29,7 +29,7 @@ class NonogramDetector:
     # @timeit
     @staticmethod
     def check_minimal_size(contour):
-        x, y, h, w = cv2.boundingRect(contour)
+        x, y, w, h = cv2.boundingRect(contour)
         if h > Config.d_min and w > Config.d_min and 1. / Config.aspect_ratio < 1.0 * h / w < Config.aspect_ratio:
             return True
 
