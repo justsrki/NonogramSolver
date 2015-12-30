@@ -1,16 +1,19 @@
 from nonogram import Nonogram
 from nonogram_detector.binarize_functions import *
-from nonogram_detector.nonogram_detector import NonogramDetector
+from nonogram_detector.nonogram_detector import *
 from nonogram_detector.rectangle_functions import *
 from perspective_transformer.perspective_transformer import *
-from lines_detector.lines_detector import LinesDetector
+from lines_detector.lines_detector import *
 from lines_detector.line_detection_functions import *
 from digit_detector.digit_detector import *
 from digit_classifier.mask_classifier import *
+from nonogram_solver.nonogram_solver import *
+from solution_creator.solution_creator import *
 
-
+'''
 mask_classifier = MaskClassifier(digits_path="..\\..\\res\\digits_00")
 mask_classifier.test("..\\..\\res\\digits_00")
+'''
 
 path = "..\\..\\res\\imgs_00\\img_%2d.jpg"
 cap = cv2.VideoCapture(path)
@@ -36,6 +39,12 @@ while True:
 
     digit_detector = DigitDetector(classifier)
     solver.set_digit_detector(digit_detector)
+
+    nonogram_solver = NonogramSolver()
+    solver.set_nonogram_solver(nonogram_solver)
+
+    solution_creator = SolutionCreator()
+    solver.set_solution_creator(solution_creator)
 
     imgs = solver.solve()
     for img in imgs:
