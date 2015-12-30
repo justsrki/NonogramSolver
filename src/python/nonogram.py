@@ -44,7 +44,7 @@ class Nonogram:
 
             self.digit_detector.set_image(img)
             self.digit_detector.set_lines(coords)
-            img = self.digit_detector.get_result()
+            img, nonogram_values = self.digit_detector.get_result()
 
             sol.append(img)
 
