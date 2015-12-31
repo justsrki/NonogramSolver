@@ -1,8 +1,8 @@
 import cv2
+from util.benchmark import timeit
 
 
 class SolutionCreator:
-
     def __init__(self):
         self.image = None
         self.coordinates = None
@@ -17,6 +17,7 @@ class SolutionCreator:
     def set_solution(self, solution):
         self.solution = solution
 
+    @timeit
     def get_result(self):
         self.image = cv2.cvtColor(self.image, cv2.COLOR_GRAY2RGB)
         lines_v = self.coordinates[0]
@@ -25,7 +26,7 @@ class SolutionCreator:
             for j in xrange(1, len(lines_h) - 1):
                 x1, x2 = lines_v[i], lines_v[i + 1]
                 y1, y2 = lines_h[j], lines_h[j + 1]
-                if self.solution[j - 1, i - 1] != 0:
+                if self.solution[j - 1][i - 1] != 0:
                     cv2.rectangle(self.image, (x1, y1), (x2, y2), (0, 0, 0), thickness=cv2.FILLED)
 
         return self.image

@@ -1,4 +1,5 @@
-import numpy as np
+from util.benchmark import timeit
+from native.nonogram_solver_cy import *
 
 
 class NonogramSolver:
@@ -8,8 +9,15 @@ class NonogramSolver:
     def set_values(self, values):
         self.values = values
 
+    @timeit
     def get_result(self):
-        v = len(self.values[0])
-        h = len(self.values[1])
-        sol = np.random.randint(0, 2, size=(h, v))
+        col_cnt = len(self.values[0])
+        row_cnt = len(self.values[1])
+
+        native_solver = NonogramSolverNative()
+        native_solver.set_values(row_cnt, col_cnt, self.values[1], self.values[0])
+        native_solver.solve()
+        sol = native_solver.get_solution()
+        print(sol)
+
         return sol

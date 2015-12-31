@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-from util.benchmark import timeit
 from config import Config
 
 
@@ -13,7 +12,6 @@ def _applay_nxm_kernel(image, x, y):
     return cv2.erode(cv2.dilate(image, np.ones((v, v), 'uint8')), np.ones((v, v), 'uint8'))
 
 
-@timeit
 def lines_nxm_kernel(image):
     img_vertical = _applay_nxm_kernel(image, Config.lines_kernel_short, Config.lines_kernel_long)
     img_horizontal = _applay_nxm_kernel(image, Config.lines_kernel_long, Config.lines_kernel_short)

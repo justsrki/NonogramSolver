@@ -54,6 +54,10 @@ class Nonogram:
             self.digit_detector.set_lines(coords)
             img, nonogram_values = self.digit_detector.get_result()
 
+            if nonogram_values is None:
+                result.append(img)
+                continue
+
             self.nonogram_solver.set_values(nonogram_values)
             solution = self.nonogram_solver.get_result()
 
@@ -61,7 +65,7 @@ class Nonogram:
             self.solution_creator.set_coordinates(coords)
             self.solution_creator.set_solution(solution)
             img = self.solution_creator.get_result()
-            
+
             result.append(img)
 
         return result
