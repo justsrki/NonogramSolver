@@ -23,28 +23,17 @@ while True:
     if not ret:
         break
 
-    solver = Nonogram(frame)
-
     nonogram_detector = NonogramDetector(binarize_adaptive_threshold, rectangle_approx_poly)
-    solver.set_nonogram_detector(nonogram_detector)
-
-    transformer = PerspectiveTransformer(binarize_fixed_threshold(96))
-    solver.set_perspective_transformer(transformer)
-
+    transformer = PerspectiveTransformer(binarize_fixed_threshold(105), binarize_adaptive_threshold)
     line_detector = LinesDetector(lines_nxm_kernel)
-    solver.set_line_detector(line_detector)
-
     classifier = MaskClassifier(masks_path="..\\..\\res\\digits_00\\masks")
-    solver.set_digit_classifier(classifier)
-
     digit_detector = DigitDetector(classifier)
-    solver.set_digit_detector(digit_detector)
-
     nonogram_solver = NonogramSolver()
-    solver.set_nonogram_solver(nonogram_solver)
-
     solution_creator = SolutionCreator()
-    solver.set_solution_creator(solution_creator)
+
+    solver = Nonogram(frame, nonogram_detector=nonogram_detector, perspective_transformer=transformer,
+                      line_detector=line_detector, digit_classifier=classifier, digit_detector=digit_detector,
+                      nonogram_solver=nonogram_solver, solution_creator=solution_creator)
 
     imgs = solver.solve()
     for img in imgs:

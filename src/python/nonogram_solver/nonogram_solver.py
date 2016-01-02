@@ -14,10 +14,13 @@ class NonogramSolver:
         col_cnt = len(self.values[0])
         row_cnt = len(self.values[1])
 
-        native_solver = NonogramSolverNative()
-        native_solver.set_values(row_cnt, col_cnt, self.values[1], self.values[0])
-        native_solver.solve()
-        sol = native_solver.get_solution()
-        print(sol)
+        try:
+            native_solver = NonogramSolverNative()
+            native_solver.set_values(row_cnt, col_cnt, self.values[1], self.values[0])
+            native_solver.solve()
+            sol = native_solver.get_solution()
+        except Exception as e:
+            print e
+            sol = [[]]
 
         return sol

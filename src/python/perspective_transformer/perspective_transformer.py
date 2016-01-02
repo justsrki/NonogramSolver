@@ -5,13 +5,17 @@ from util.benchmark import timeit
 
 
 class PerspectiveTransformer:
-    def __init__(self, binarize_fn):
-        self.binarize_fn = binarize_fn
+    def __init__(self, fixed_binarize_fn, adaptive_binarize_fn=None):
+        self.fixed_binarize_fn = fixed_binarize_fn
+        self.adaptive_binarize_fn = adaptive_binarize_fn
         self.image = None
         self.contour = None
 
     def set_image(self, image):
         self.image = image
+        if self.adaptive_binarize_fn is not None:
+            self.image = cv2.cvtColor(self.image, cv2.COLOR_RGB2GRAY)
+            self.image = self.adaptive_binarize_fn(self.image)
 
     def set_contour(self, contour):
         self.contour = contour
@@ -54,4 +58,4 @@ class PerspectiveTransformer:
             [0, max_height - 1]], dtype="float32")
 
         wrapped_img = cv2.warpPerspective(self.image, cv2.getPerspectiveTransform(rect, dst_coordinates), (max_width, max_height))
-        return self.binarize_fn(wrapped_img)
+        return self.fixed_binarize_fn(wrapped_img)

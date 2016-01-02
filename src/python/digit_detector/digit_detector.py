@@ -73,7 +73,7 @@ class DigitDetector:
                 y1, y2 = lines_h[j] + 1, lines_h[j + 1] - 1
                 cv2.rectangle(self.image, (x1, y1), (x2, y2), (255, 0, 0))
 
-                min_h = min(x2-x1, y2-y1) / 3
+                min_h = min(x2 - x1, y2 - y1) / 3
                 min_w = min_h / 2
 
                 region = 255 - img_gray[lines_h[j] + 1:  lines_h[j + 1] - 1, lines_v[i] + 1: lines_v[i + 1] - 1]
@@ -84,8 +84,8 @@ class DigitDetector:
                     x, y, w, h = cv2.boundingRect(contour)
                     if h > min_h and w > min_w:
                         digit = region[y: y + h, x:x + w]
-                        value = sorted(self.classifier.classify(255-digit))[0][1]
-                        cv2.putText(self.image, str(value), (x+x1, y+y1+h), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), thickness=2)
+                        value = sorted(self.classifier.classify(255 - digit))[0][1]
+                        cv2.putText(self.image, str(value), (x + x1, y + y1 + h), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), thickness=2)
                         region_digits.append((x, y, w, h, value))
 
                 if i + j != 0:
@@ -98,7 +98,10 @@ class DigitDetector:
                         if len(nums) != 0:
                             nonogram_values[1].append(nums)
 
-        if sum([sum(vals) for vals in nonogram_values[0]]) == sum([sum(vals) for vals in nonogram_values[1]]):
+        sum0 = sum([sum(vals) for vals in nonogram_values[0]])
+        sum1 = sum([sum(vals) for vals in nonogram_values[1]])
+
+        if sum0 == sum1 and sum0 != 0:
             return self.image, nonogram_values
         else:
             return self.image, None
