@@ -73,16 +73,16 @@ class DigitDetector:
                 y1, y2 = lines_h[j] + 1, lines_h[j + 1] - 1
                 cv2.rectangle(self.image, (x1, y1), (x2, y2), (255, 0, 0))
 
-                min_h = min(x2 - x1, y2 - y1) / 3
-                min_w = min_h / 2
+                min_h = min(x2 - x1, y2 - y1) / 3.0
+                min_w = min_h / 2.0
 
                 region = 255 - img_gray[lines_h[j] + 1:  lines_h[j + 1] - 1, lines_v[i] + 1: lines_v[i + 1] - 1]
-                _, contours, _ = cv2.findContours(region.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+                _, contours, _ = cv2.findContours(region.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
                 region_digits = []
                 for contour in contours:
                     x, y, w, h = cv2.boundingRect(contour)
-                    if h > min_h and w > min_w:
+                    if 3 * min_h > h > min_h and 4 * min_w > w > min_w:
                         digit = region[y: y + h, x:x + w]
                         value = sorted(self.classifier.classify(255 - digit))[0][1]
                         cv2.putText(self.image, str(value), (x + x1, y + y1 + h), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), thickness=2)

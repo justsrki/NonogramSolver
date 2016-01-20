@@ -1,6 +1,5 @@
 import cv2
 from config import Config
-
 from util.benchmark import timeit
 
 
@@ -9,6 +8,7 @@ class NonogramDetector:
         self.binarize_fn = binarize_fn
         self.rectangle_fn = rectangle_fn
         self.image = None
+        self.image_gray = None
 
     def set_image(self, image):
         self.image = image
@@ -17,6 +17,7 @@ class NonogramDetector:
     def resize_image(self):
         factor = Config.image_width / self.image.shape[1]
         self.image = cv2.resize(self.image, (0, 0), fx=factor, fy=factor, interpolation=Config.interpolation)
+        self.image_gray = self.image.copy()
 
     @timeit
     def change_color_channel(self):
@@ -47,9 +48,10 @@ class NonogramDetector:
 
     @timeit
     def get_result(self):
-        self.change_color_channel()
         self.resize_image()
+        self.change_color_channel()
+
         self.binarize()
         rects = self.find_rectangles()
 
-        return self.image, rects
+        return self.image_gray, self.image, rects

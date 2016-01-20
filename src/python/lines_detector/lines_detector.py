@@ -1,4 +1,5 @@
 import numpy as np
+import cv2
 from util.benchmark import timeit
 from config import Config
 
@@ -42,5 +43,4 @@ class LinesDetector:
         img_v, img_h = self.line_detection_fn(self.image)
         coords_v = self.get_lines_coordinates(img_v.sum(axis=0), self.image.shape[0])
         coords_h = self.get_lines_coordinates(img_h.sum(axis=1), self.image.shape[1])
-
         return (img_v, img_h), (coords_v, coords_h)

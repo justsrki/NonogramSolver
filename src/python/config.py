@@ -16,7 +16,7 @@ class Config:
     c = 2
 
     # find rectangles
-    d_min = 600 / scale
+    d_min = 400 / scale
     aspect_ratio = 3
     epsilon = 0.01
 

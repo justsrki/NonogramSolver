@@ -19,10 +19,11 @@ class Nonogram:
     def solve(self):
         result = []
         self.nonogram_detector.set_image(self.image)
-        img_bin, rects = self.nonogram_detector.get_result()
+        img_gray, img_bin, rects = self.nonogram_detector.get_result()
+        # result.append(cv2.drawContours(cv2.cvtColor(img_bin, cv2.COLOR_GRAY2RGB), rects, -1, (0, 0, 255), thickness=5))
 
         for rect in rects:
-            self.perspective_transformer.set_image(self.image)
+            self.perspective_transformer.set_image(img_gray)
             self.perspective_transformer.set_contour(rect)
             img_wrapped = self.perspective_transformer.get_result()
 
@@ -35,7 +36,6 @@ class Nonogram:
             img, nonogram_values = self.digit_detector.get_result()
 
             if nonogram_values is None:
-                # result.append(img)
                 print "Nonogram can't be found or solved!"
                 continue
 
