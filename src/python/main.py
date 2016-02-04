@@ -11,9 +11,9 @@ from nonogram_solver.nonogram_solver import *
 from solution_creator.solution_creator import *
 from util.file_reader import *
 
-
+imgs_path, end = "..\\..\\res\\test_p7_l10", "jpg"
 # imgs_path, end = "..\\..\\res\\test_iphone5s", "JPG"
-imgs_path, end = "..\\..\\res\\test_i8750", "jpg"
+# imgs_path, end = "..\\..\\res\\test_i8750", "jpg"
 # imgs_path, end = "..\\..\\res\\imgs_00", "jpg"
 
 for i, path in enumerate(get_files(imgs_path, end=end)):

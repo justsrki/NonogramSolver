@@ -36,6 +36,7 @@ class Nonogram:
             img, nonogram_values = self.digit_detector.get_result()
 
             if nonogram_values is None:
+                result.append(img)
                 print "Nonogram can't be found or solved!"
                 continue
 
