@@ -1,5 +1,4 @@
 import numpy as np
-import cv2
 from util.benchmark import timeit
 from config import Config
 
